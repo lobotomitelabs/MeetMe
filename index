@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clio's Curiosities — Meet the Artist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+
+    :root {
+      --bg:        #0d0810;
+      --bg2:       #130d18;
+      --surface:   #1c1224;
+      --border:    #3a1f3a;
+      --rose:      #c4547a;
+      --rose-pale: #e8809e;
+      --rose-dim:  #7a2a47;
+      --lavender:  #9b72cf;
+      --lav-dim:   #5c3d8a;
+      --text:      #f0dde8;
+      --text-muted:#a07898;
+      --pixel:     'Silkscreen', monospace;
+      --body:      'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 1rem;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: var(--rose-pale); text-decoration: none; }
+    a:hover { color: var(--lavender); }
+    img { max-width: 100%; display: block; }
+
+    #starfield {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--rose-pale);
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      50%       { opacity: var(--peak, 0.6); transform: scale(1); }
+    }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13, 8, 16, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+    }
+    .nav-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--pixel);
+      font-size: 0.7rem;
+      color: var(--rose);
+      letter-spacing: 0.05em;
+    }
+    .nav-links {
+      display: flex; gap: 1.5rem; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--rose-pale); }
+
+
+    #hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+    }
+    .hero-avatar {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--rose-dim);
+      background: var(--surface);
+      margin: 0 auto 2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      box-shadow: 0 0 32px rgba(196, 84, 122, 0.2);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    .hero-eyebrow {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--rose);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: var(--pixel);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    h1 span { color: var(--rose-pale); }
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      font-style: italic;
+    }
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      justify-content: center;
+    }
+    .tag {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--surface);
+    }
+    .tag.rose  { border-color: var(--rose-dim); color: var(--rose-pale); }
+    .tag.lav   { border-color: var(--lav-dim);  color: var(--lavender); }
+    .scroll-hint {
+      position: absolute; bottom: 2rem;
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50%       { transform: translateY(4px); opacity: 1; }
+    }
+
+
+    section {
+      padding: 5rem 0;
+      position: relative; z-index: 1;
+    }
+    .section-label {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--rose);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-family: var(--pixel);
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      line-height: 1.4;
+    }
+    p { color: var(--text-muted); margin-bottom: 1rem; }
+    p strong { color: var(--text); font-weight: 500; }
+
+
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .about-facts {
+      display: flex; flex-direction: column; gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .fact {
+      display: flex; gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .fact-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .fact-text { font-size: 0.9rem; color: var(--text-muted); }
+    .fact-text strong { color: var(--text); display: block; font-size: 0.8rem; font-family: var(--pixel); }
+
+
+    #makes { background: var(--bg2); }
+    .makes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .make-card {
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .make-card:hover {
+      border-color: var(--rose-dim);
+      box-shadow: 0 0 20px rgba(196, 84, 122, 0.1);
+    }
+    .make-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .make-card h3 {
+      font-family: var(--pixel);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--rose-pale);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .make-card p { font-size: 0.875rem; margin: 0; }
+
+
+    .projects-list {
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .project-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.25s;
+    }
+    .project-card:hover { border-color: var(--lav-dim); }
+    .project-thumb {
+      width: 80px; height: 80px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .project-meta { display: flex; flex-direction: column; gap: 0.4rem; }
+    .project-meta h3 {
+      font-family: var(--pixel);
+      font-size: 0.7rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+    .project-meta p { font-size: 0.875rem; margin: 0; }
+    .project-link {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-top: 0.25rem;
+      display: inline-block;
+    }
+    .project-link:hover { color: var(--rose-pale); }
+    .status-badge {
+      display: inline-block;
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .status-wip  { background: rgba(155, 114, 207, 0.15); color: var(--lavender); border: 1px solid var(--lav-dim); }
+    .status-live { background: rgba(196, 84, 122, 0.15); color: var(--rose-pale); border: 1px solid var(--rose-dim); }
+
+
+    #commissions { background: var(--bg2); }
+    .comm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .comm-card {
+      padding: 1.25rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .comm-card h3 {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--lavender);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .comm-card ul {
+      list-style: none; padding: 0;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .comm-card li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding-left: 0.75rem;
+      position: relative;
+    }
+    .comm-card li::before {
+      content: '›';
+      position: absolute; left: 0;
+      color: var(--rose-dim);
+    }
+    .cta-block {
+      padding: 2rem;
+      border: 1px solid var(--rose-dim);
+      border-radius: 4px;
+      background: rgba(196, 84, 122, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cta-block p { margin: 0; font-size: 0.95rem; }
+    .btn {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      border-radius: 3px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-rose {
+      background: var(--rose);
+      color: #fff;
+      border: 1px solid var(--rose);
+    }
+    .btn-rose:hover {
+      background: var(--rose-pale);
+      border-color: var(--rose-pale);
+      color: var(--bg);
+    }
+
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      position: relative; z-index: 1;
+    }
+    .footer-name {
+      font-family: var(--pixel);
+      font-size: 0.7rem;
+      color: var(--rose);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .footer-links {
+      display: flex; gap: 1.5rem;
+      list-style: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .footer-links a {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .footer-links a:hover { color: var(--rose-pale); }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute; left: 2px; top: 0;
+      color: var(--lavender);
+      clip-path: inset(0 0 80% 0);
+      animation: glitch 5s infinite step-end;
+      opacity: 0.6;
+    }
+    @keyframes glitch {
+      0%,90%,100% { clip-path: inset(0 0 100% 0); transform: translateX(0); }
+      92%          { clip-path: inset(20% 0 60% 0); transform: translateX(-2px); }
+      94%          { clip-path: inset(50% 0 20% 0); transform: translateX(2px); }
+      96%          { clip-path: inset(70% 0 10% 0); transform: translateX(-1px); }
+    }
+
+    @media (max-width: 640px) {
+      #about .about-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-thumb { width: 60px; height: 60px; font-size: 1.5rem; }
+      .cta-block { flex-direction: column; text-align: center; }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="starfield" aria-hidden="true"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-logo">✦ CLIO'S CURIOSITIES ✦</span>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#makes">What I Make</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#commissions">Commissions</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="container">
+      <div class="hero-avatar" aria-label="Clio's mascot">🖥️</div>
+      <p class="hero-eyebrow">✦ meet the artist ✦</p>
+      <h1>
+        hey, I'm <span class="glitch" data-text="Clio">Clio</span>
+      </h1>
+      <p class="hero-tagline">
+        indie dev, gothic gremlin, collector of curiosities.<br/>
+        I make games, bots, and things that probably shouldn't exist.
+      </p>
+      <div class="hero-tags">
+        <span class="tag rose">Godot 4</span>
+        <span class="tag rose">HTML / CSS / JS</span>
+        <span class="tag lav">Discord Bots</span>
+        <span class="tag lav">Pixel Art</span>
+        <span class="tag">itch.io</span>
+        <span class="tag">Gothic sci-fi</span>
+      </div>
+    </div>
+    <span class="scroll-hint" aria-hidden="true">▼ scroll ▼</span>
+  </section>
+
+  <hr class="divider" />
+
+  <section id="about">
+    <div class="container">
+      <p class="section-label">✦ who I am ✦</p>
+      <div class="about-grid">
+        <div>
+          <h2>solo dev with a curiosity cabinet for a brain</h2>
+          <p>
+            I'm Clio — a solo indie developer and digital artist with a thing for
+            <strong>dark aesthetics, weird little worlds, projects that blur the line
+            between game and experience and making clothes that are out of this world.</strong>
+          </p>
+          <p>
+            Most of what I build lives somewhere in the gothic sci-fi pocket:
+            pixel art that feels a little too real, UIs that look like they're
+            watching you back, stories that get under your skin, clothes that were made
+            just for you. I like making things that feel like you found them 
+            rather than downloaded/bought them.
+          </p>
+          <p>
+            When I'm not deep in Godot or wrestling with CSS at 4am and 8 monsters deep, 
+            I'm probably filling up my curiosity cabinet with references, aesthetics, and games
+            I'll will most definitely finish someday.
+          </p>
+        </div>
+        <div class="about-facts">
+          <div class="fact">
+            <span class="fact-icon">🎮</span>
+            <div class="fact-text">
+              <strong>Engine of choice</strong>
+              Godot, because who doesn't love torture :3
+            </div>
+          </div>
+          <div class="fact">
+            <span class="fact-icon">🌐</span>
+            <div class="fact-text">
+              <strong>Web stack</strong>
+              HTML / CSS / JS, because everything can be done when you stay
+              up till 4am researching if it can be.
+            </div>
+          </div>
+          <div class="fact">
+            <span class="fact-icon">🤖</span>
+            <div class="fact-text">
+              <strong>Bot work</strong>
+              discord.py, because being a Discord Mod wasn't enough.
+            </div>
+          </div>
+          <div class="fact">
+            <span class="fact-icon">🖤</span>
+            <div class="fact-text">
+              <strong>Aesthetic</strong>
+              dark rosy-pink · pixel art · gothic curiosity cabinet
+            </div>
+          </div>
+          <div class="fact">
+            <span class="fact-icon">✨</span>
+            <div class="fact-text">
+              <strong>Published on</strong>
+              itch.io under Clibotomy || 
+              github under LobotomiteLabs
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section id="makes">
+    <div class="container">
+      <p class="section-label">✦ what I make</p>
+      <h2>a little bit of everything, actually</h2>
+      <div class="makes-grid">
+        <div class="make-card">
+          <div class="make-icon">🎮</div>
+          <h3>Indie Games</h3>
+          <p>Psychological horror, desktop sims, RPGs, and weird little interactive things, mostly in Godot and HTML.</p>
+        </div>
+        <div class="make-card">
+          <div class="make-icon">🌐</div>
+          <h3>Web Experiences</h3>
+          <p>HTML/CSS/JS projects ranging from full desktop simulators to tools, profile themes, and portfolio sites.</p>
+        </div>
+        <div class="make-card">
+          <div class="make-icon">🤖</div>
+          <h3>Discord Bots</h3>
+          <p>Feature-rich bots built in discord.py. RPG systems, economy, slash commands, the works.</p>
+        </div>
+        <div class="make-card">
+          <div class="make-icon">🎨</div>
+          <h3>Site Designs</h3>
+          <p>Custom theming for Discord servers, itch.io pages, and anywhere else CSS can go.</p>
+        </div>
+        <div class="make-card">
+            <div class="make-icon">🧶</div>
+            <h3>Crochet</h3>
+            <p>Basically if you can wear it, I can make it.</p>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section id="projects">
+    <div class="container">
+      <p class="section-label">✦ featured projects ✦</p>
+      <h2>things I've made (and am making)</h2>
+      <div class="projects-list">
+
+        <div class="project-card">
+          <div class="project-thumb">💻</div>
+          <div class="project-meta">
+            <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+              <h3>favoriteUser.exe</h3>
+              <span class="status-badge status-wip">in dev</span>
+            </div>
+            <p>A psychological horror desktop simulator where you're the favorite user of an AI companion named CASS, who gets increasingly obsessive over 15 in-game days. Built in Godot.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">🌿</div>
+          <div class="project-meta">
+            <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+              <h3>CozyCryptids</h3>
+              <span class="status-badge status-wip">in dev</span>
+            </div>
+            <p>A cozy farming RPG with a cryptid investigation layer. Grow crops, befriend mushroom people, photograph anomalies, and slowly uncover what's living in the fields. Built in Godot.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">🧿</div>
+          <div class="project-meta">
+            <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+              <h3>Clio's Curiosities Portfolio</h3>
+              <span class="status-badge status-live">live</span>
+            </div>
+            <p>My main portfolio site — a pixel art curiosity cabinet with twinkling stars and project jars. Each jar opens to a project showcase.</p>
+            <a href="https://lobotomitelabs.github.io/clioscuriosities/" class="project-link">visit →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section id="commissions">
+    <div class="container">
+      <p class="section-label">✦ work with me</p>
+      <h2>commissions & custom work</h2>
+      <p>I take commissions for creative work. Here's what I currently offer:</p>
+      <div class="comm-grid">
+        <div class="comm-card">
+          <h3>🤖 Discord</h3>
+          <ul>
+            <li>Custom slash command bots</li>
+            <li>Sever Templates</li>
+            <li>Verify Bots</li>
+            <li>D&D / tabletop Bots</li>
+          </ul>
+        </div>
+        <div class="comm-card">
+          <h3>🧶 Crochet</h3>
+          <ul>
+            <li>Dresses</li>
+            <li>Shirts</li>
+            <li>Hats</li>
+            <li>Custom Designs</li>
+          </ul>
+        </div>
+        <div class="comm-card">
+          <h3>🌐 Web Projects</h3>
+          <ul>
+            <li>Portfolio pages</li>
+            <li>Interactive web toys</li>
+            <li>HTML/CSS/JS builds</li>
+            <li>Profile Themes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cta-block">
+        <p>Want something made? <strong>Let's talk.</strong> Drop me a message and we'll figure out what your project needs.</p>
+        <a href="https://discord.gg/D6dsBTQ6m" class="btn btn-rose">Get in Touch →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="footer-name">✦ CLIO'S LINKS ✦</p>
+    <ul class="footer-links">
+      <li><a href="https://clibotomy.itch.io">itch.io</a></li>
+      <li><a href="https://ko-fi.com/lobotomitelabs">Ko-fi</a></li>
+      <li><a href="https://discord.gg/D6dsBTQ6m">Discord</a></li>
+      <li><a href="https://x.com/lobotomitelabs?s=11">Twitter</a></li>
+    </ul>
+    <p class="footer-copy">© LobotomiteLabs — made with spite.</p>
+  </footer>
+
+  <script>
+    const field = document.getElementById('starfield');
+    const count = 120;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2 + 1;
+      s.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        --dur: ${2 + Math.random() * 4}s;
+        --peak: ${0.3 + Math.random() * 0.5};
+        animation-delay: ${Math.random() * 5}s;
+      `;
+      if (Math.random() < 0.2) s.style.background = '#9b72cf';
+      field.appendChild(s);
+    }
+  </script>
+
+</body>
+</html>
