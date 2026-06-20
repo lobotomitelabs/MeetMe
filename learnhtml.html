@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Dev for Curious Creatures ✦ Clio's Curiosities</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --void: #0f080b;
+    --deep: #1a0d12;
+    --card: #220e16;
+    --border: #5c2d3e;
+    --muted: #7a3d52;
+    --rose: #c4607a;
+    --blush: #e8a0b0;
+    --petal: #f0d0da;
+    --cream: #fce8ef;
+    --glow: rgba(196, 96, 122, 0.18);
+    --css-accent: #a060c4;
+    --css-glow: rgba(160, 96, 196, 0.18);
+    --js-accent: #c4a060;
+    --js-glow: rgba(196, 160, 96, 0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--blush);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star {
+    position: absolute; width: 2px; height: 2px;
+    background: var(--petal); border-radius: 50%;
+    animation: twinkle var(--d, 3s) ease-in-out infinite; opacity: 0;
+  }
+  @keyframes twinkle { 0%,100%{opacity:0;} 50%{opacity:var(--op,0.7);} }
+
+  .site-wrap {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 56px 24px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .header-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 0.25em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    color: var(--cream); line-height: 1.15;
+    text-shadow: 0 0 40px rgba(196,96,122,0.5); margin-bottom: 14px;
+  }
+  header h1 span { color: var(--rose); }
+  .header-sub { font-style: italic; color: var(--muted); font-size: 1rem; max-width: 520px; margin: 0 auto; }
+  .mascot {
+    position: absolute; right: 32px; top: 32px;
+    font-size: 2.4rem; filter: drop-shadow(0 0 12px var(--rose));
+    animation: mascot-float 4s ease-in-out infinite;
+    cursor: default; user-select: none; transition: transform 0.2s;
+  }
+  .mascot:hover { transform: scale(1.3) rotate(-8deg); }
+  @keyframes mascot-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+  nav {
+    padding: 24px 0; position: sticky; top: 0;
+    max-height: 100vh; overflow-y: auto;
+    border-right: 1px solid var(--border); scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--muted); text-transform: uppercase;
+    padding: 0 20px 8px; margin-top: 14px;
+  }
+  .nav-label.css-label { color: var(--css-accent); }
+  .nav-label.js-label  { color: var(--js-accent); }
+  nav a {
+    display: block; padding: 6px 20px;
+    color: var(--blush); text-decoration: none; font-size: 0.85rem;
+    border-left: 2px solid transparent; transition: all 0.2s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  nav a:hover, nav a.active {
+    color: var(--petal); border-left-color: var(--rose);
+    background: linear-gradient(to right, var(--glow), transparent);
+    padding-left: 24px;
+  }
+  nav a.css-link:hover, nav a.css-link.active {
+    border-left-color: var(--css-accent);
+    background: linear-gradient(to right, var(--css-glow), transparent);
+  }
+  nav a.js-link:hover, nav a.js-link.active {
+    border-left-color: var(--js-accent);
+    background: linear-gradient(to right, var(--js-glow), transparent);
+  }
+
+  main { padding: 40px 0 80px 48px; min-width: 0; }
+
+  .chapter-band {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px; border-radius: 8px; margin-bottom: 48px;
+    border: 1px solid var(--border);
+  }
+  .chapter-band.html { background: linear-gradient(135deg, #2a0f18, #1a0d12); border-color: var(--rose); }
+  .chapter-band.css  { background: linear-gradient(135deg, #1e0f2a, #1a0d12); border-color: var(--css-accent); }
+  .chapter-band.js   { background: linear-gradient(135deg, #2a1f0f, #1a0d12); border-color: var(--js-accent); }
+  .band-icon { font-size: 2rem; }
+  .band-title { font-family: 'IM Fell English', serif; font-size: 1.5rem; color: var(--cream); }
+  .band-sub   { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+
+  .lesson {
+    margin-bottom: 68px; opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .lesson.visible { opacity: 1; transform: translateY(0); }
+  .lesson-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 0.25em;
+    color: var(--rose); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .lesson-tag.css { color: var(--css-accent); }
+  .lesson-tag.js  { color: var(--js-accent); }
+  .lesson h2 {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 1.85rem; color: var(--cream); margin-bottom: 6px;
+  }
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 10px 0 22px; color: var(--border); font-size: 0.75rem;
+  }
+  .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  p { color: var(--blush); margin-bottom: 14px; }
+  p strong { color: var(--petal); }
+  li { color: var(--blush); margin-bottom: 4px; }
+
+  .code-block {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .code-block-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #c4607a; } .dot-y { background: #c4a060; } .dot-g { background: #60a47a; }
+  pre {
+    padding: 18px 20px; overflow-x: auto;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.83rem;
+    line-height: 1.75; color: var(--petal); tab-size: 2;
+  }
+  code { font-family: 'Share Tech Mono', monospace; font-size: 0.88em; color: var(--rose); }
+  p code { background: rgba(196,96,122,0.1); padding: 1px 5px; border-radius: 3px; }
+
+  .t  { color: #e8a0b0; }
+  .a  { color: #c4a060; }
+  .v  { color: #7ac4a0; }
+  .cm { color: #5c3d4a; font-style: italic; }
+  .tx { color: #e0ccd4; }
+  .kw { color: #a060c4; }   
+  .fn { color: #c4a060; }   
+  .st { color: #7ac4a0; }   
+  .nm { color: #c4e0a0; }   
+  .cs { color: #e8a0b0; }   
+  .cp { color: #c4a060; }   
+  .cv { color: #7ac4a0; }   
+
+  .callout {
+    background: var(--glow); border-left: 3px solid var(--rose);
+    border-radius: 0 6px 6px 0; padding: 14px 18px; margin: 20px 0; font-size: 0.93rem;
+  }
+  .callout.css { background: var(--css-glow); border-left-color: var(--css-accent); }
+  .callout.js  { background: var(--js-glow);  border-left-color: var(--js-accent); }
+  .callout-emoji { margin-right: 6px; }
+
+  .playground-wrap { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .pg-tabs {
+    display: flex; background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .pg-tab {
+    padding: 10px 20px; cursor: pointer;
+    font-family: 'Share Tech Mono', monospace; font-size: 12px;
+    color: var(--muted); border-bottom: 2px solid transparent;
+    transition: all 0.2s; user-select: none;
+  }
+  .pg-tab:hover { color: var(--blush); }
+  .pg-tab.active-html { color: var(--rose);        border-bottom-color: var(--rose); }
+  .pg-tab.active-css  { color: var(--css-accent);  border-bottom-color: var(--css-accent); }
+  .pg-tab.active-js   { color: var(--js-accent);   border-bottom-color: var(--js-accent); }
+  .pg-run {
+    margin-left: auto; align-self: center; margin-right: 12px;
+    background: var(--rose); color: var(--void); border: none;
+    padding: 5px 16px; border-radius: 4px; cursor: pointer;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; font-weight: bold;
+    transition: background 0.2s;
+  }
+  .pg-run:hover { background: var(--petal); }
+  .pg-pane { display: none; }
+  .pg-pane.active { display: block; }
+  .pg-pane textarea {
+    width: 100%; background: #100608; color: var(--petal);
+    border: none; padding: 18px 20px;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.83rem;
+    line-height: 1.75; resize: vertical; min-height: 210px; outline: none;
+  }
+  .pg-output {
+    border-top: 1px solid var(--border); background: #fff; min-height: 100px;
+  }
+  .pg-output iframe { width: 100%; height: 180px; border: none; display: block; }
+  .pg-output-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    letter-spacing: 0.15em; color: var(--muted); padding: 7px 14px;
+    background: var(--card); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px; margin: 20px 0;
+  }
+  .ref-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px; transition: border-color 0.2s, transform 0.2s;
+  }
+  .ref-card:hover { transform: translateY(-2px); }
+  .ref-card.html:hover { border-color: var(--rose); }
+  .ref-card.css:hover  { border-color: var(--css-accent); }
+  .ref-card.js:hover   { border-color: var(--js-accent); }
+  .ref-card code { color: var(--rose); font-size: 0.88rem; display: block; margin-bottom: 3px; }
+  .ref-card.css  code { color: var(--css-accent); }
+  .ref-card.js   code { color: var(--js-accent); }
+  .ref-card p { font-size: 0.78rem; color: var(--muted); margin: 0; }
+
+  .box-model-demo {
+    display: flex; justify-content: center; margin: 24px 0;
+  }
+  .bm-margin {
+    background: rgba(196,160,96,0.15); border: 2px dashed var(--js-accent);
+    padding: 24px; border-radius: 4px; position: relative;
+  }
+  .bm-border {
+    background: rgba(160,96,196,0.15); border: 8px solid var(--css-accent);
+    padding: 20px; border-radius: 2px;
+  }
+  .bm-padding {
+    background: rgba(196,96,122,0.15); border: 2px dashed var(--rose);
+    padding: 16px;
+  }
+  .bm-content {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 16px 24px; text-align: center;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: var(--petal);
+  }
+  .bm-label {
+    position: absolute; font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .bm-label.margin-l { top: 4px; left: 8px; color: var(--js-accent); }
+  .bm-label.border-l { top: -14px; left: 0; color: var(--css-accent); }
+  .bm-label.padding-l { top: -14px; left: 0; color: var(--rose); }
+
+  .progress-track {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(to right, var(--rose), var(--css-accent), var(--js-accent));
+    z-index: 100; transition: width 0.1s linear;
+    box-shadow: 0 0 8px var(--rose);
+  }
+
+  footer {
+    grid-column: 1 / -1; border-top: 1px solid var(--border);
+    text-align: center; padding: 32px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em;
+  }
+  footer a { color: var(--rose); text-decoration: none; }
+  footer a:hover { color: var(--petal); }
+
+  @media (max-width: 720px) {
+    .site-wrap { grid-template-columns: 1fr; }
+    nav { display: none; }
+    main { padding: 32px 0 60px; }
+    .mascot { font-size: 1.8rem; right: 16px; top: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .star, .mascot { animation: none; }
+    .lesson { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-track" id="prog"></div>
+<div id="stars"></div>
+
+<div class="site-wrap">
+
+<header>
+  <div class="mascot" title="ur friendly guide ♡">♡</div>
+  <div class="header-eyebrow">✦ lobotmitelabs presents ✦</div>
+  <h1>Web Dev for <span>Curious Creatures</span></h1>
+  <p class="header-sub">a complete grimoire covering HTML, CSS & JavaScript, for those who want to build their own corner of the web ♡</p>
+</header>
+
+<nav id="sidebar">
+  <div class="nav-label">✦ html</div>
+  <a href="#html-what">what is html?</a>
+  <a href="#html-anatomy">anatomy of a tag</a>
+  <a href="#html-structure">page structure</a>
+  <a href="#html-text">text & headings</a>
+  <a href="#html-links">links & images</a>
+  <a href="#html-lists">lists</a>
+  <a href="#html-divs">divs & spans</a>
+  <a href="#html-semantic">semantic html</a>
+  <a href="#html-forms">forms & inputs</a>
+  <a href="#html-tables">tables</a>
+  <a href="#html-attrs">attributes deep dive</a>
+
+  <div class="nav-label css-label">✦ css</div>
+  <a href="#css-what" class="css-link">what is css?</a>
+  <a href="#css-selectors" class="css-link">selectors</a>
+  <a href="#css-boxmodel" class="css-link">the box model</a>
+  <a href="#css-colors" class="css-link">colors & backgrounds</a>
+  <a href="#css-typography" class="css-link">typography</a>
+  <a href="#css-flexbox" class="css-link">flexbox</a>
+  <a href="#css-cascade" class="css-link">the cascade</a>
+  <a href="#css-variables" class="css-link">css variables</a>
+  <a href="#css-animations" class="css-link">transitions & animation</a>
+
+  <div class="nav-label js-label">✦ javascript</div>
+  <a href="#js-what" class="js-link">what is js?</a>
+  <a href="#js-vars" class="js-link">variables & types</a>
+  <a href="#js-functions" class="js-link">functions</a>
+  <a href="#js-dom" class="js-link">the DOM</a>
+  <a href="#js-events" class="js-link">events</a>
+  <a href="#js-conditionals" class="js-link">conditionals & loops</a>
+
+  <div class="nav-label">✦ tools</div>
+  <a href="#playground">live playground</a>
+  <a href="#cheatsheet">cheatsheet</a>
+</nav>
+
+<main>
+<div class="chapter-band html lesson" id="html-band">
+  <div class="band-icon">🌹</div>
+  <div>
+    <div class="band-title">Part One: HTML</div>
+    <div class="band-sub">the bones of the web — structure & content</div>
+  </div>
+</div>
+
+<section class="lesson" id="html-what">
+  <div class="lesson-tag">HTML · Chapter 01</div>
+  <h2>What Even Is HTML?</h2>
+  <div class="divider">✦</div>
+  <p>HTML stands for <strong>HyperText Markup Language</strong>. It's not really a "programming language". It's more like a set of labels you put around your content to tell the browser what everything <em>is</em>.</p>
+  <p>Think of it like annotating a manuscript. You're not making the words do math. You're saying <em>"this is a heading,"</em> <em>"this is a paragraph,"</em> <em>"this is a link."</em> The browser reads those labels and renders everything into a page.</p>
+  <div class="callout">
+    <span class="callout-emoji">🌹</span> <strong>no pressure vibes:</strong> HTML is one of the most forgiving things to learn. Typos usually just make things look a little weird — they don't explode. You can't break the internet with a bad &lt;p&gt; tag.
+  </div>
+  <p>Every single webpage you've ever visited! Every itch.io game page, every Neocities shrine, every fanfic archive — starts with HTML. It's the bones of the web.</p>
+</section>
+
+<section class="lesson" id="html-anatomy">
+  <div class="lesson-tag">HTML · Chapter 02</div>
+  <h2>Anatomy of a Tag</h2>
+  <div class="divider">✦</div>
+  <p>HTML is built from <strong>tags</strong>. A tag is a word wrapped in angle brackets: <code>&lt;like this&gt;</code>. Most tags come in pairs:</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> basic element</div>
+    <pre><span class="t">&lt;p&gt;</span><span class="tx">This is a paragraph of text.</span><span class="t">&lt;/p&gt;</span>
+<span class="cm">&lt;!--  ↑ opening tag    ↑ closing tag (has a /) --&gt;</span></pre>
+  </div>
+  <p>Tags can also have <strong>attributes</strong> extra info inside the opening tag:</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> with attributes</div>
+    <pre><span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"https://itch.io"</span> <span class="a">target</span>=<span class="v">"_blank"</span><span class="t">&gt;</span><span class="tx">visit itch.io!</span><span class="t">&lt;/a&gt;</span>
+<span class="cm">&lt;!--   ↑ attr name   ↑ attr value (always in quotes) --&gt;</span></pre>
+  </div>
+  <div class="callout">
+    <span class="callout-emoji">💀</span> <strong>void elements (self-closing):</strong> some tags don't wrap content — they just <em>are</em> a thing, like <code>&lt;img&gt;</code> or <code>&lt;br&gt;</code>. No closing tag needed.
+  </div>
+</section>
+
+<section class="lesson" id="html-structure">
+  <div class="lesson-tag">HTML · Chapter 03</div>
+  <h2>The Shape of a Page</h2>
+  <div class="divider">✦</div>
+  <p>Every HTML document follows the same skeleton:</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> index.html</div>
+    <pre><span class="t">&lt;!DOCTYPE html&gt;</span>        <span class="cm">&lt;!-- "this is html5" --&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="v">"en"</span><span class="t">&gt;</span>
+
+  <span class="t">&lt;head&gt;</span>
+    <span class="cm">&lt;!-- invisible to users: metadata, title, CSS links --&gt;</span>
+    <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="v">"UTF-8"</span><span class="t">&gt;</span>
+    <span class="t">&lt;meta</span> <span class="a">name</span>=<span class="v">"viewport"</span> <span class="a">content</span>=<span class="v">"width=device-width, initial-scale=1"</span><span class="t">&gt;</span>
+    <span class="t">&lt;title&gt;</span><span class="tx">My Cool Page</span><span class="t">&lt;/title&gt;</span>
+    <span class="t">&lt;link</span> <span class="a">rel</span>=<span class="v">"stylesheet"</span> <span class="a">href</span>=<span class="v">"style.css"</span><span class="t">&gt;</span>
+  <span class="t">&lt;/head&gt;</span>
+
+  <span class="t">&lt;body&gt;</span>
+    <span class="cm">&lt;!-- everything users actually see goes here --&gt;</span>
+    <span class="t">&lt;h1&gt;</span><span class="tx">hello world</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;script</span> <span class="a">src</span>=<span class="v">"script.js"</span><span class="t">&gt;&lt;/script&gt;</span>  <span class="cm">&lt;!-- JS goes at end of body --&gt;</span>
+  <span class="t">&lt;/body&gt;</span>
+
+<span class="t">&lt;/html&gt;</span></pre>
+  </div>
+  <div class="callout"><span class="callout-emoji">🌙</span> <strong>the viewport meta tag</strong> makes your page not look tiny and zoomed out on phones. always include it.</div>
+</section>
+
+<section class="lesson" id="html-text">
+  <div class="lesson-tag">HTML · Chapter 04</div>
+  <h2>Text & Headings</h2>
+  <div class="divider">✦</div>
+  <p>HTML has six heading levels (<code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>). <code>&lt;h1&gt;</code> is the most important — use it once per page, as the main title. The others are section/subsection headers.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> text elements</div>
+    <pre><span class="t">&lt;h1&gt;</span><span class="tx">Page Title (use once)</span><span class="t">&lt;/h1&gt;</span>
+<span class="t">&lt;h2&gt;</span><span class="tx">Section Header</span><span class="t">&lt;/h2&gt;</span>
+<span class="t">&lt;h3&gt;</span><span class="tx">Subsection</span><span class="t">&lt;/h3&gt;</span>
+
+<span class="t">&lt;p&gt;</span><span class="tx">A normal paragraph. Can be long. Wraps naturally.</span><span class="t">&lt;/p&gt;</span>
+
+<span class="t">&lt;p&gt;</span><span class="tx">Make text </span><span class="t">&lt;strong&gt;</span><span class="tx">bold</span><span class="t">&lt;/strong&gt;</span><span class="tx">, </span><span class="t">&lt;em&gt;</span><span class="tx">italic</span><span class="t">&lt;/em&gt;</span><span class="tx">,
+or </span><span class="t">&lt;strong&gt;&lt;em&gt;</span><span class="tx">both</span><span class="t">&lt;/em&gt;&lt;/strong&gt;</span><span class="tx">.</span><span class="t">&lt;/p&gt;</span>
+
+<span class="t">&lt;p&gt;</span><span class="tx">You can also do </span><span class="t">&lt;mark&gt;</span><span class="tx">highlighted</span><span class="t">&lt;/mark&gt;</span><span class="tx">, </span>
+<span class="t">&lt;del&gt;</span><span class="tx">strikethrough</span><span class="t">&lt;/del&gt;</span><span class="tx">, </span><span class="t">&lt;small&gt;</span><span class="tx">small text</span><span class="t">&lt;/small&gt;</span><span class="tx">,
+and </span><span class="t">&lt;code&gt;</span><span class="tx">inline code</span><span class="t">&lt;/code&gt;</span><span class="tx">.</span><span class="t">&lt;/p&gt;</span>
+
+<span class="t">&lt;blockquote&gt;</span><span class="tx">A quoted passage, indented by the browser.</span><span class="t">&lt;/blockquote&gt;</span>
+
+<span class="t">&lt;br&gt;</span>  <span class="cm">&lt;!-- line break — void element --&gt;</span>
+<span class="t">&lt;hr&gt;</span>  <span class="cm">&lt;!-- horizontal rule (divider line) --&gt;</span></pre>
+  </div>
+  <div class="callout"><span class="callout-emoji">✨</span> <strong>don't skip heading levels</strong> just for style — screenreaders use them to navigate the page. Change how they look with CSS instead.</div>
+</section>
+
+<section class="lesson" id="html-links">
+  <div class="lesson-tag">HTML · Chapter 05</div>
+  <h2>Links & Images</h2>
+  <div class="divider">✦</div>
+  <p><strong>Links</strong> use <code>&lt;a&gt;</code> (anchor). <code>href</code> is where it goes. <code>target="_blank"</code> opens in a new tab.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> links</div>
+    <pre><span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"https://itch.io"</span> <span class="a">target</span>=<span class="v">"_blank"</span><span class="t">&gt;</span><span class="tx">new tab link</span><span class="t">&lt;/a&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"about.html"</span><span class="t">&gt;</span><span class="tx">relative link (same site)</span><span class="t">&lt;/a&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"#section-id"</span><span class="t">&gt;</span><span class="tx">jump to section on this page</span><span class="t">&lt;/a&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"mailto:hi@example.com"</span><span class="t">&gt;</span><span class="tx">email link</span><span class="t">&lt;/a&gt;</span></pre>
+  </div>
+  <p><strong>Images</strong> use <code>&lt;img&gt;</code> — void element, no closing tag. <code>alt</code> text is required for accessibility.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> images</div>
+    <pre><span class="t">&lt;img</span> <span class="a">src</span>=<span class="v">"cat.png"</span> <span class="a">alt</span>=<span class="v">"a small gray cat"</span><span class="t">&gt;</span>
+
+<span class="cm">&lt;!-- responsive (CSS will control actual size) --&gt;</span>
+<span class="t">&lt;img</span> <span class="a">src</span>=<span class="v">"banner.jpg"</span> <span class="a">alt</span>=<span class="v">"site banner"</span> <span class="a">width</span>=<span class="v">"800"</span> <span class="a">height</span>=<span class="v">"300"</span> <span class="a">loading</span>=<span class="v">"lazy"</span><span class="t">&gt;</span>
+
+<span class="cm">&lt;!-- clickable image (link wrapping an img) --&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"https://itch.io"</span><span class="t">&gt;</span>
+  <span class="t">&lt;img</span> <span class="a">src</span>=<span class="v">"logo.png"</span> <span class="a">alt</span>=<span class="v">"go to itch.io"</span><span class="t">&gt;</span>
+<span class="t">&lt;/a&gt;</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="html-lists">
+  <div class="lesson-tag">HTML · Chapter 06</div>
+  <h2>Lists</h2>
+  <div class="divider">✦</div>
+  <p>Three types: <strong>unordered</strong> (bullets), <strong>ordered</strong> (numbers), and <strong>definition lists</strong> (term + description pairs). Each item is always a <code>&lt;li&gt;</code>.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> lists</div>
+    <pre><span class="t">&lt;ul&gt;</span>  <span class="cm">&lt;!-- unordered --&gt;</span>
+  <span class="t">&lt;li&gt;</span><span class="tx">mushrooms</span><span class="t">&lt;/li&gt;</span>
+  <span class="t">&lt;li&gt;</span><span class="tx">cryptids</span><span class="t">&lt;/li&gt;</span>
+<span class="t">&lt;/ul&gt;</span>
+
+<span class="t">&lt;ol&gt;</span>  <span class="cm">&lt;!-- ordered (numbered) --&gt;</span>
+  <span class="t">&lt;li&gt;</span><span class="tx">open godot</span><span class="t">&lt;/li&gt;</span>
+  <span class="t">&lt;li&gt;</span><span class="tx">make something cool</span><span class="t">&lt;/li&gt;</span>
+<span class="t">&lt;/ol&gt;</span>
+
+<span class="t">&lt;dl&gt;</span>  <span class="cm">&lt;!-- definition list --&gt;</span>
+  <span class="t">&lt;dt&gt;</span><span class="tx">HTML</span><span class="t">&lt;/dt&gt;</span>
+  <span class="t">&lt;dd&gt;</span><span class="tx">the structure of a webpage</span><span class="t">&lt;/dd&gt;</span>
+  <span class="t">&lt;dt&gt;</span><span class="tx">CSS</span><span class="t">&lt;/dt&gt;</span>
+  <span class="t">&lt;dd&gt;</span><span class="tx">the style of a webpage</span><span class="t">&lt;/dd&gt;</span>
+<span class="t">&lt;/dl&gt;</span>
+
+<span class="cm">&lt;!-- lists can be nested! --&gt;</span>
+<span class="t">&lt;ul&gt;</span>
+  <span class="t">&lt;li&gt;</span><span class="tx">games
+    </span><span class="t">&lt;ul&gt;</span>
+      <span class="t">&lt;li&gt;</span><span class="tx">godot games</span><span class="t">&lt;/li&gt;</span>
+      <span class="t">&lt;li&gt;</span><span class="tx">browser games</span><span class="t">&lt;/li&gt;</span>
+    <span class="t">&lt;/ul&gt;</span>
+  <span class="t">&lt;/li&gt;</span>
+<span class="t">&lt;/ul&gt;</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="html-divs">
+  <div class="lesson-tag">HTML · Chapter 07</div>
+  <h2>Divs & Spans</h2>
+  <div class="divider">✦</div>
+  <p><code>&lt;div&gt;</code> is a <strong>block container</strong> takes full width, starts on a new line. For sections, cards, wrappers.</p>
+  <p><code>&lt;span&gt;</code> is an <strong>inline container</strong> sits inside text. For styling a single word or icon mid-sentence.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> divs & spans</div>
+    <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card"</span><span class="t">&gt;</span>
+  <span class="t">&lt;h2&gt;</span><span class="tx">My Card</span><span class="t">&lt;/h2&gt;</span>
+  <span class="t">&lt;p&gt;</span><span class="tx">some content in a styled box</span><span class="t">&lt;/p&gt;</span>
+<span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;p&gt;</span><span class="tx">this word is </span><span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"glow"</span><span class="t">&gt;</span><span class="tx">glowing</span><span class="t">&lt;/span&gt;</span><span class="tx"> in pink.</span><span class="t">&lt;/p&gt;</span></pre>
+  </div>
+  <div class="callout"><span class="callout-emoji">🌹</span> <strong>class vs id:</strong> <code>class</code> can repeat on multiple elements. <code>id</code> must be unique per page. Use <code>class</code> for styling, <code>id</code> for JS targeting or page anchors.</div>
+</section>
+
+<section class="lesson" id="html-semantic">
+  <div class="lesson-tag">HTML · Chapter 08</div>
+  <h2>Semantic HTML</h2>
+  <div class="divider">✦</div>
+  <p>Semantic tags are like <code>&lt;div&gt;</code> they're containers — but they have <em>meaning</em>. They tell browsers, search engines, and screenreaders what role each part of your page plays.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> semantic structure</div>
+    <pre><span class="t">&lt;header&gt;</span>
+  <span class="cm">&lt;!-- site logo, main nav, page title --&gt;</span>
+  <span class="t">&lt;nav&gt;</span>
+    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"/"</span><span class="t">&gt;</span><span class="tx">home</span><span class="t">&lt;/a&gt;</span>
+    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"about.html"</span><span class="t">&gt;</span><span class="tx">about</span><span class="t">&lt;/a&gt;</span>
+  <span class="t">&lt;/nav&gt;</span>
+<span class="t">&lt;/header&gt;</span>
+
+<span class="t">&lt;main&gt;</span>
+  <span class="cm">&lt;!-- primary unique content of the page --&gt;</span>
+  <span class="t">&lt;article&gt;</span>
+    <span class="cm">&lt;!-- self-contained content: a blog post, a game listing --&gt;</span>
+    <span class="t">&lt;h1&gt;</span><span class="tx">My Game</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">a cozy cryptid farming rpg</span><span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/article&gt;</span>
+
+  <span class="t">&lt;section&gt;</span>
+    <span class="cm">&lt;!-- thematic group within the page --&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">Features</span><span class="t">&lt;/h2&gt;</span>
+  <span class="t">&lt;/section&gt;</span>
+
+  <span class="t">&lt;aside&gt;</span>
+    <span class="cm">&lt;!-- sidebar, related links, extra info --&gt;</span>
+  <span class="t">&lt;/aside&gt;</span>
+<span class="t">&lt;/main&gt;</span>
+
+<span class="t">&lt;footer&gt;</span>
+  <span class="cm">&lt;!-- copyright, social links, small print --&gt;</span>
+<span class="t">&lt;/footer&gt;</span></pre>
+  </div>
+  <div class="callout"><span class="callout-emoji">🌙</span> <strong>why bother?</strong> a screenreader user can jump straight to <code>&lt;main&gt;</code> and skip the nav. Google understands your <code>&lt;article&gt;</code> is important content. Semantic HTML = better accessibility + better SEO, for free.</div>
+</section>
+
+<section class="lesson" id="html-forms">
+  <div class="lesson-tag">HTML · Chapter 09</div>
+  <h2>Forms & Inputs</h2>
+  <div class="divider">✦</div>
+  <p>Forms let users send you data — login screens, contact forms, search bars, game settings. The <code>&lt;form&gt;</code> wraps everything, and <code>&lt;input&gt;</code> is the actual field.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> form elements</div>
+    <pre><span class="t">&lt;form&gt;</span>
+
+  <span class="cm">&lt;!-- text input --&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"name"</span><span class="t">&gt;</span><span class="tx">your name</span><span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"text"</span> <span class="a">id</span>=<span class="v">"name"</span> <span class="a">placeholder</span>=<span class="v">"mysterious traveler..."</span><span class="t">&gt;</span>
+
+  <span class="cm">&lt;!-- email input (validates format) --&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"email"</span> <span class="a">placeholder</span>=<span class="v">"you@example.com"</span><span class="t">&gt;</span>
+
+  <span class="cm">&lt;!-- multi-line text --&gt;</span>
+  <span class="t">&lt;textarea</span> <span class="a">rows</span>=<span class="v">"4"</span> <span class="a">placeholder</span>=<span class="v">"your message..."</span><span class="t">&gt;&lt;/textarea&gt;</span>
+
+  <span class="cm">&lt;!-- dropdown --&gt;</span>
+  <span class="t">&lt;select&gt;</span>
+    <span class="t">&lt;option</span> <span class="a">value</span>=<span class="v">"goblin"</span><span class="t">&gt;</span><span class="tx">goblin</span><span class="t">&lt;/option&gt;</span>
+    <span class="t">&lt;option</span> <span class="a">value</span>=<span class="v">"cryptid"</span><span class="t">&gt;</span><span class="tx">cryptid</span><span class="t">&lt;/option&gt;</span>
+  <span class="t">&lt;/select&gt;</span>
+
+  <span class="cm">&lt;!-- checkbox --&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"checkbox"</span> <span class="a">id</span>=<span class="v">"subscribe"</span><span class="t">&gt;</span>
+  <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"subscribe"</span><span class="t">&gt;</span><span class="tx">send me cursed updates</span><span class="t">&lt;/label&gt;</span>
+
+  <span class="cm">&lt;!-- range slider --&gt;</span>
+  <span class="t">&lt;input</span> <span class="a">type</span>=<span class="v">"range"</span> <span class="a">min</span>=<span class="v">"0"</span> <span class="a">max</span>=<span class="v">"100"</span><span class="t">&gt;</span>
+
+  <span class="t">&lt;button</span> <span class="a">type</span>=<span class="v">"submit"</span><span class="t">&gt;</span><span class="tx">send it ✦</span><span class="t">&lt;/button&gt;</span>
+
+<span class="t">&lt;/form&gt;</span></pre>
+  </div>
+  <div class="callout"><span class="callout-emoji">✨</span> always pair <code>&lt;label&gt;</code> with inputs using <code>for="id"</code>. it makes them clickable AND accessible — screenreaders read the label out loud when focusing the input.</div>
+</section>
+
+<section class="lesson" id="html-tables">
+  <div class="lesson-tag">HTML · Chapter 10</div>
+  <h2>Tables</h2>
+  <div class="divider">✦</div>
+  <p>Tables are for <em>tabular data</em> — think stat sheets, schedules, comparisons. Not for layout (that's what CSS is for).</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> table structure</div>
+    <pre><span class="t">&lt;table&gt;</span>
+  <span class="t">&lt;thead&gt;</span>  <span class="cm">&lt;!-- header row --&gt;</span>
+    <span class="t">&lt;tr&gt;</span>
+      <span class="t">&lt;th&gt;</span><span class="tx">cryptid</span><span class="t">&lt;/th&gt;</span>
+      <span class="t">&lt;th&gt;</span><span class="tx">vibe</span><span class="t">&lt;/th&gt;</span>
+      <span class="t">&lt;th&gt;</span><span class="tx">threat level</span><span class="t">&lt;/th&gt;</span>
+    <span class="t">&lt;/tr&gt;</span>
+  <span class="t">&lt;/thead&gt;</span>
+  <span class="t">&lt;tbody&gt;</span>  <span class="cm">&lt;!-- data rows --&gt;</span>
+    <span class="t">&lt;tr&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">mothman</span><span class="t">&lt;/td&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">mysterious, winged</span><span class="t">&lt;/td&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">prophetic</span><span class="t">&lt;/td&gt;</span>
+    <span class="t">&lt;/tr&gt;</span>
+    <span class="t">&lt;tr&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">wendigo</span><span class="t">&lt;/td&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">cold, ancient</span><span class="t">&lt;/td&gt;</span>
+      <span class="t">&lt;td&gt;</span><span class="tx">high</span><span class="t">&lt;/td&gt;</span>
+    <span class="t">&lt;/tr&gt;</span>
+  <span class="t">&lt;/tbody&gt;</span>
+<span class="t">&lt;/table&gt;</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="html-attrs">
+  <div class="lesson-tag">HTML · Chapter 11</div>
+  <h2>Attributes Deep Dive</h2>
+  <div class="divider">✦</div>
+  <p>Some attributes work on any element. Others are specific to certain tags. Here's a rundown of the most useful ones:</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> global attributes</div>
+    <pre><span class="cm">&lt;!-- class: for CSS styling (can repeat) --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card highlight"</span><span class="t">&gt;</span><span class="tx">two classes at once</span><span class="t">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- id: unique identifier (one per page) --&gt;</span>
+<span class="t">&lt;section</span> <span class="a">id</span>=<span class="v">"about"</span><span class="t">&gt;</span><span class="tx">...</span><span class="t">&lt;/section&gt;</span>
+
+<span class="cm">&lt;!-- style: inline CSS (avoid for big projects) --&gt;</span>
+<span class="t">&lt;p</span> <span class="a">style</span>=<span class="v">"color: pink; font-size: 20px;"</span><span class="t">&gt;</span><span class="tx">pink text</span><span class="t">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- title: tooltip on hover --&gt;</span>
+<span class="t">&lt;abbr</span> <span class="a">title</span>=<span class="v">"HyperText Markup Language"</span><span class="t">&gt;</span><span class="tx">HTML</span><span class="t">&lt;/abbr&gt;</span>
+
+<span class="cm">&lt;!-- hidden: hides element (JS can show it later) --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">hidden</span><span class="t">&gt;</span><span class="tx">you can't see me yet</span><span class="t">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- data-*: custom data for JavaScript --&gt;</span>
+<span class="t">&lt;button</span> <span class="a">data-item-id</span>=<span class="v">"potion"</span> <span class="a">data-qty</span>=<span class="v">"3"</span><span class="t">&gt;</span><span class="tx">buy</span><span class="t">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- tabindex: control keyboard focus order --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">tabindex</span>=<span class="v">"0"</span><span class="t">&gt;</span><span class="tx">now keyboard-focusable!</span><span class="t">&lt;/div&gt;</span></pre>
+  </div>
+</section>
+
+<div class="chapter-band css lesson" id="css-band">
+  <div class="band-icon">🔮</div>
+  <div>
+    <div class="band-title">Part Two: CSS</div>
+    <div class="band-sub">the skin, style & soul of the web</div>
+  </div>
+</div>
+
+<section class="lesson" id="css-what">
+  <div class="lesson-tag css">CSS · Chapter 01</div>
+  <h2>What Is CSS?</h2>
+  <div class="divider">✦</div>
+  <p>CSS stands for <strong>Cascading Style Sheets</strong>. It's what makes things look like <em>things</em>. Colors, fonts, sizes, layouts, animations — all CSS.</p>
+  <p>You write CSS rules that say: <em>"find this element, apply these styles."</em> You can write CSS in a separate <code>.css</code> file (best for real projects), inside a <code>&lt;style&gt;</code> tag in your HTML, or inline with the <code>style</code> attribute.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> css rule anatomy</div>
+    <pre><span class="cs">p</span> {                         <span class="cm">/* selector: targets all &lt;p&gt; tags */</span>
+  <span class="cp">color</span>: <span class="cv">#e8a0b0</span>;           <span class="cm">/* property: value; */</span>
+  <span class="cp">font-size</span>: <span class="cv">18px</span>;
+  <span class="cp">line-height</span>: <span class="cv">1.6</span>;
+}</pre>
+  </div>
+  <div class="callout callout css"><span class="callout-emoji">🔮</span> <strong>the "cascading" part</strong> means styles flow down and can override each other. More specific rules win. Later rules override earlier ones. We'll cover this in the Cascade section.</div>
+</section>
+
+<section class="lesson" id="css-selectors">
+  <div class="lesson-tag css">CSS · Chapter 02</div>
+  <h2>Selectors</h2>
+  <div class="divider">✦</div>
+  <p>Selectors are how you <em>target</em> elements. They range from simple to powerful:</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> selector types</div>
+    <pre><span class="cm">/* element selector — targets all of that tag */</span>
+<span class="cs">h2</span> { <span class="cp">color</span>: <span class="cv">pink</span>; }
+
+<span class="cm">/* class selector — targets class="card" */</span>
+<span class="cs">.card</span> { <span class="cp">background</span>: <span class="cv">#1a0d12</span>; }
+
+<span class="cm">/* id selector — targets id="hero" */</span>
+<span class="cs">#hero</span> { <span class="cp">font-size</span>: <span class="cv">3rem</span>; }
+
+<span class="cm">/* combine: p tags inside .card */</span>
+<span class="cs">.card p</span> { <span class="cp">color</span>: <span class="cv">#aaa</span>; }
+
+<span class="cm">/* direct child only */</span>
+<span class="cs">.nav > a</span> { <span class="cp">padding</span>: <span class="cv">8px</span>; }
+
+<span class="cm">/* multiple selectors at once */</span>
+<span class="cs">h1, h2, h3</span> { <span class="cp">font-family</span>: <span class="cv">Georgia, serif</span>; }
+
+<span class="cm">/* pseudo-class: only on hover */</span>
+<span class="cs">button:hover</span> { <span class="cp">background</span>: <span class="cv">var(--rose)</span>; }
+
+<span class="cm">/* pseudo-class: first item in a list */</span>
+<span class="cs">li:first-child</span> { <span class="cp">font-weight</span>: <span class="cv">bold</span>; }
+
+<span class="cm">/* attribute selector: inputs of type text */</span>
+<span class="cs">input[type="text"]</span> { <span class="cp">border</span>: <span class="cv">1px solid pink</span>; }</pre>
+  </div>
+</section>
+
+<section class="lesson" id="css-boxmodel">
+  <div class="lesson-tag css">CSS · Chapter 03</div>
+  <h2>The Box Model</h2>
+  <div class="divider">✦</div>
+  <p>Every HTML element is a box. The box model describes the layers around it, from inside out: <strong>content → padding → border → margin</strong>.</p>
+  <div class="box-model-demo">
+    <div class="bm-margin" style="position:relative;">
+      <span class="bm-label margin-l">margin</span>
+      <div class="bm-border" style="position:relative;">
+        <span class="bm-label border-l" style="top:-18px;left:0;position:absolute;color:var(--css-accent);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;">border</span>
+        <div class="bm-padding" style="position:relative;">
+          <span class="bm-label" style="top:-16px;left:0;position:absolute;color:var(--rose);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;">padding</span>
+          <div class="bm-content">content</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> box model properties</div>
+    <pre><span class="cs">.card</span> {
+  <span class="cm">/* padding: space INSIDE the box */</span>
+  <span class="cp">padding</span>: <span class="cv">20px</span>;              <span class="cm">/* all sides */</span>
+  <span class="cp">padding</span>: <span class="cv">10px 20px</span>;         <span class="cm">/* top/bottom  left/right */</span>
+  <span class="cp">padding</span>: <span class="cv">8px 16px 12px 16px</span>; <span class="cm">/* top right bottom left */</span>
+
+  <span class="cm">/* margin: space OUTSIDE the box */</span>
+  <span class="cp">margin</span>: <span class="cv">16px 0</span>;             <span class="cm">/* same shorthand as padding */</span>
+  <span class="cp">margin</span>: <span class="cv">0 auto</span>;             <span class="cm">/* horizontally centered! */</span>
+
+  <span class="cm">/* border */</span>
+  <span class="cp">border</span>: <span class="cv">1px solid #5c2d3e</span>;
+  <span class="cp">border-radius</span>: <span class="cv">8px</span>;          <span class="cm">/* rounded corners */</span>
+
+  <span class="cm">/* width & height */</span>
+  <span class="cp">width</span>: <span class="cv">300px</span>;
+  <span class="cp">max-width</span>: <span class="cv">100%</span>;             <span class="cm">/* responsive: never wider than parent */</span>
+
+  <span class="cm">/* box-sizing (ALWAYS set this globally!) */</span>
+  <span class="cp">box-sizing</span>: <span class="cv">border-box</span>;     <span class="cm">/* padding is included IN the width */</span>
+}</pre>
+  </div>
+  <div class="callout callout css"><span class="callout-emoji">🔮</span> <code>box-sizing: border-box</code> is one of the most important CSS tricks. Without it, adding padding makes your box wider than expected. Most sites set it globally with <code>* { box-sizing: border-box; }</code>.</div>
+</section>
+
+<section class="lesson" id="css-colors">
+  <div class="lesson-tag css">CSS · Chapter 04</div>
+  <h2>Colors & Backgrounds</h2>
+  <div class="divider">✦</div>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> color formats</div>
+    <pre><span class="cs">.element</span> {
+  <span class="cm">/* hex — most common */</span>
+  <span class="cp">color</span>: <span class="cv">#c4607a</span>;
+  <span class="cp">color</span>: <span class="cv">#c47</span>;          <span class="cm">/* shorthand for #cc4477 */</span>
+
+  <span class="cm">/* rgb / rgba (a = alpha/opacity) */</span>
+  <span class="cp">color</span>: <span class="cv">rgb(196, 96, 122)</span>;
+  <span class="cp">color</span>: <span class="cv">rgba(196, 96, 122, 0.5)</span>;  <span class="cm">/* 50% transparent */</span>
+
+  <span class="cm">/* hsl (hue, saturation, lightness) */</span>
+  <span class="cp">color</span>: <span class="cv">hsl(345, 45%, 57%)</span>;
+
+  <span class="cm">/* named colors */</span>
+  <span class="cp">color</span>: <span class="cv">hotpink</span>;
+  <span class="cp">color</span>: <span class="cv">transparent</span>;
+
+  <span class="cm">/* backgrounds */</span>
+  <span class="cp">background-color</span>: <span class="cv">#1a0d12</span>;
+  <span class="cp">background-image</span>: <span class="cv">url("texture.png")</span>;
+  <span class="cp">background-size</span>: <span class="cv">cover</span>;         <span class="cm">/* fill the box */</span>
+  <span class="cp">background-position</span>: <span class="cv">center</span>;
+
+  <span class="cm">/* gradients */</span>
+  <span class="cp">background</span>: <span class="cv">linear-gradient(to bottom, #1a0d12, #0f080b)</span>;
+  <span class="cp">background</span>: <span class="cv">radial-gradient(circle, #c4607a, #1a0d12)</span>;
+}</pre>
+  </div>
+</section>
+
+<section class="lesson" id="css-typography">
+  <div class="lesson-tag css">CSS · Chapter 05</div>
+  <h2>Typography</h2>
+  <div class="divider">✦</div>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> text styling</div>
+    <pre><span class="cm">/* import a Google Font in your &lt;head&gt; */</span>
+<span class="t">@import</span> <span class="v">url('https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap')</span>;
+
+<span class="cs">body</span> {
+  <span class="cp">font-family</span>: <span class="cv">Georgia, 'Times New Roman', serif</span>; <span class="cm">/* fallback stack */</span>
+  <span class="cp">font-size</span>: <span class="cv">16px</span>;       <span class="cm">/* base size */</span>
+  <span class="cp">line-height</span>: <span class="cv">1.75</span>;    <span class="cm">/* comfortable reading space */</span>
+  <span class="cp">color</span>: <span class="cv">#e8a0b0</span>;
+}
+
+<span class="cs">h1</span> {
+  <span class="cp">font-family</span>: <span class="cv">'IM Fell English', serif</span>;
+  <span class="cp">font-size</span>: <span class="cv">3rem</span>;       <span class="cm">/* rem = relative to root font-size */</span>
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cp">letter-spacing</span>: <span class="cv">0.05em</span>;
+  <span class="cp">text-shadow</span>: <span class="cv">0 0 20px rgba(196,96,122,0.6)</span>;
+}
+
+<span class="cs">p</span> {
+  <span class="cp">font-size</span>: <span class="cv">clamp(14px, 2vw, 18px)</span>; <span class="cm">/* responsive font size! */</span>
+  <span class="cp">text-align</span>: <span class="cv">left</span>;   <span class="cm">/* left / center / right / justify */</span>
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">text-transform</span>: <span class="cv">uppercase</span>; <span class="cm">/* none / uppercase / lowercase / capitalize */</span>
+}</pre>
+  </div>
+</section>
+
+<section class="lesson" id="css-flexbox">
+  <div class="lesson-tag css">CSS · Chapter 06</div>
+  <h2>Flexbox</h2>
+  <div class="divider">✦</div>
+  <p>Flexbox is how you lay things out in a row or column. It's one of the most powerful CSS tools and you'll use it constantly.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> flexbox</div>
+    <pre><span class="cs">.container</span> {
+  <span class="cp">display</span>: <span class="cv">flex</span>;
+
+  <span class="cm">/* direction */</span>
+  <span class="cp">flex-direction</span>: <span class="cv">row</span>;          <span class="cm">/* row (default) | column */</span>
+
+  <span class="cm">/* alignment on the MAIN axis (horizontal if row) */</span>
+  <span class="cp">justify-content</span>: <span class="cv">center</span>;      <span class="cm">/* flex-start | center | flex-end | space-between | space-around */</span>
+
+  <span class="cm">/* alignment on the CROSS axis (vertical if row) */</span>
+  <span class="cp">align-items</span>: <span class="cv">center</span>;          <span class="cm">/* flex-start | center | flex-end | stretch */</span>
+
+  <span class="cm">/* wrapping (when items don't fit) */</span>
+  <span class="cp">flex-wrap</span>: <span class="cv">wrap</span>;
+
+  <span class="cm">/* gap between items */</span>
+  <span class="cp">gap</span>: <span class="cv">16px</span>;
+}
+
+<span class="cs">.item</span> {
+  <span class="cp">flex</span>: <span class="cv">1</span>;                      <span class="cm">/* grow to fill space equally */</span>
+  <span class="cp">flex-shrink</span>: <span class="cv">0</span>;               <span class="cm">/* don't shrink below natural size */</span>
+  <span class="cp">align-self</span>: <span class="cv">flex-end</span>;        <span class="cm">/* override align for just this item */</span>
+}</pre>
+  </div>
+  <div class="callout callout css"><span class="callout-emoji">🔮</span> <strong>centering something perfectly:</strong> <code>display: flex; justify-content: center; align-items: center;</code> on the parent. that's it. that's the whole trick.</div>
+</section>
+
+<section class="lesson" id="css-cascade">
+  <div class="lesson-tag css">CSS · Chapter 07</div>
+  <h2>The Cascade & Specificity</h2>
+  <div class="divider">✦</div>
+  <p>When multiple CSS rules target the same element, <strong>specificity</strong> decides who wins. Higher specificity = higher priority.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> specificity ranking</div>
+    <pre><span class="cm">/* specificity from LOWEST to HIGHEST: */</span>
+
+<span class="cs">p</span>         { <span class="cp">color</span>: <span class="cv">blue</span>; }     <span class="cm">/* element: 1 point */</span>
+<span class="cs">.text</span>     { <span class="cp">color</span>: <span class="cv">green</span>; }    <span class="cm">/* class: 10 points */</span>
+<span class="cs">#intro</span>    { <span class="cp">color</span>: <span class="cv">red</span>; }      <span class="cm">/* id: 100 points */</span>
+<span class="cm">/* inline style="color:pink"        1000 points */</span>
+<span class="cm">/* !important                       OVERRIDE ALL (avoid!) */</span>
+
+<span class="cm">/* combining adds up: */</span>
+<span class="cs">.card p</span>   { <span class="cp">color</span>: <span class="cv">pink</span>; }     <span class="cm">/* 10+1 = 11 points */</span>
+<span class="cs">.card.featured p</span> { <span class="cp">color</span>: <span class="cv">gold</span>; } <span class="cm">/* 10+10+1 = 21 points — wins! */</span>
+
+<span class="cm">/* when specificity is EQUAL, later rule wins: */</span>
+<span class="cs">p</span> { <span class="cp">color</span>: <span class="cv">blue</span>; }
+<span class="cs">p</span> { <span class="cp">color</span>: <span class="cv">pink</span>; }  <span class="cm">/* pink wins — it's later in the file */</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="css-variables">
+  <div class="lesson-tag css">CSS · Chapter 08</div>
+  <h2>CSS Custom Properties (Variables)</h2>
+  <div class="divider">✦</div>
+  <p>CSS variables let you define values once and reuse them everywhere. Change the variable and everything updates. Perfect for theming!</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> css variables</div>
+    <pre><span class="cm">/* define on :root to make them global */</span>
+<span class="cs">:root</span> {
+  <span class="cp">--rose</span>: <span class="cv">#c4607a</span>;
+  <span class="cp">--void</span>: <span class="cv">#0f080b</span>;
+  <span class="cp">--font-body</span>: <span class="cv">Georgia, serif</span>;
+  <span class="cp">--spacing-md</span>: <span class="cv">16px</span>;
+}
+
+<span class="cm">/* use with var() */</span>
+<span class="cs">body</span> {
+  <span class="cp">background</span>: <span class="cv">var(--void)</span>;
+  <span class="cp">font-family</span>: <span class="cv">var(--font-body)</span>;
+}
+
+<span class="cs">button</span> {
+  <span class="cp">background</span>: <span class="cv">var(--rose)</span>;
+  <span class="cp">padding</span>: <span class="cv">var(--spacing-md)</span>;
+}
+
+<span class="cm">/* you can even set a fallback value */</span>
+<span class="cs">.thing</span> {
+  <span class="cp">color</span>: <span class="cv">var(--text-color, #ffffff)</span>;  <span class="cm">/* falls back to white */</span>
+}</pre>
+  </div>
+</section>
+
+<section class="lesson" id="css-animations">
+  <div class="lesson-tag css">CSS · Chapter 09</div>
+  <h2>Transitions & Animations</h2>
+  <div class="divider">✦</div>
+  <p><strong>Transitions</strong> smoothly animate between two states (e.g. hover). <strong>Animations</strong> loop and run on their own with keyframes.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> transitions & animations</div>
+    <pre><span class="cm">/* TRANSITION: smooth state changes */</span>
+<span class="cs">button</span> {
+  <span class="cp">background</span>: <span class="cv">#c4607a</span>;
+  <span class="cp">transition</span>: <span class="cv">background 0.2s ease, transform 0.2s</span>;
+}
+<span class="cs">button:hover</span> {
+  <span class="cp">background</span>: <span class="cv">#e8a0b0</span>;   <span class="cm">/* smoothly fades to this */</span>
+  <span class="cp">transform</span>: <span class="cv">scale(1.05)</span>;
+}
+
+<span class="cm">/* ANIMATION: runs automatically */</span>
+<span class="cs">.star</span> {
+  <span class="cp">animation</span>: <span class="cv">twinkle 3s ease-in-out infinite</span>;
+}
+
+<span class="t">@keyframes</span> twinkle {
+  <span class="nm">0%</span>, <span class="nm">100%</span> { <span class="cp">opacity</span>: <span class="cv">0</span>; }
+  <span class="nm">50%</span>       { <span class="cp">opacity</span>: <span class="cv">1</span>; }
+}
+
+<span class="cm">/* floating effect */</span>
+<span class="t">@keyframes</span> float {
+  <span class="nm">0%</span>, <span class="nm">100%</span> { <span class="cp">transform</span>: <span class="cv">translateY(0)</span>; }
+  <span class="nm">50%</span>       { <span class="cp">transform</span>: <span class="cv">translateY(-10px)</span>; }
+}
+
+<span class="cm">/* common transform functions: */</span>
+<span class="cm">/* translateX/Y(px), scale(n), rotate(deg), skew(deg) */</span></pre>
+  </div>
+</section>
+
+<div class="chapter-band js lesson" id="js-band">
+  <div class="band-icon">⚡</div>
+  <div>
+    <div class="band-title">Part Three: JavaScript</div>
+    <div class="band-sub">bring your page to life — logic, interaction & magic</div>
+  </div>
+</div>
+
+<section class="lesson" id="js-what">
+  <div class="lesson-tag js">JS · Chapter 01</div>
+  <h2>What Is JavaScript?</h2>
+  <div class="divider">✦</div>
+  <p>JavaScript is the programming language of the web. HTML is structure, CSS is style, and JS is <strong>behavior</strong> — making things actually <em>do stuff</em> when you interact with them.</p>
+  <p>Clicking a button and having something happen, menus opening and closing, loading new content, running a game — all JavaScript. It's also how you build Discord bots (Node.js), game logic in Godot-adjacent tools, and interactive apps.</p>
+  <div class="callout callout js"><span class="callout-emoji">⚡</span> you link a JS file with <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code> at the end of your <code>&lt;body&gt;</code>. Or write it inline in a <code>&lt;script&gt;</code> tag. You can also open your browser DevTools console (F12) and run JS live right there.</div>
+</section>
+
+<section class="lesson" id="js-vars">
+  <div class="lesson-tag js">JS · Chapter 02</div>
+  <h2>Variables & Data Types</h2>
+  <div class="divider">✦</div>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> variables</div>
+    <pre><span class="cm">// let: can be reassigned</span>
+<span class="kw">let</span> playerName = <span class="st">"mysterious traveler"</span>;
+playerName = <span class="st">"clio"</span>;  <span class="cm">// fine!</span>
+
+<span class="cm">// const: can't be reassigned (use this by default)</span>
+<span class="kw">const</span> maxHealth = <span class="nm">100</span>;
+
+<span class="cm">// DATA TYPES:</span>
+<span class="kw">const</span> name     = <span class="st">"clio"</span>;          <span class="cm">// string</span>
+<span class="kw">const</span> health   = <span class="nm">85</span>;             <span class="cm">// number</span>
+<span class="kw">const</span> alive    = <span class="kw">true</span>;           <span class="cm">// boolean (true/false)</span>
+<span class="kw">const</span> nothing  = <span class="kw">null</span>;           <span class="cm">// intentionally empty</span>
+<span class="kw">const</span> items    = [<span class="st">"sword"</span>, <span class="st">"potion"</span>, <span class="st">"map"</span>];  <span class="cm">// array</span>
+<span class="kw">const</span> player   = {                <span class="cm">// object</span>
+  name: <span class="st">"clio"</span>,
+  health: <span class="nm">85</span>,
+  level: <span class="nm">12</span>
+};
+
+<span class="cm">// access object properties:</span>
+console.<span class="fn">log</span>(player.name);      <span class="cm">// "clio"</span>
+console.<span class="fn">log</span>(player[<span class="st">"level"</span>]);  <span class="cm">// 12</span>
+
+<span class="cm">// access array items (0-indexed):</span>
+console.<span class="fn">log</span>(items[<span class="nm">0</span>]);           <span class="cm">// "sword"</span>
+console.<span class="fn">log</span>(items.<span class="fn">length</span>);      <span class="cm">// 3</span>
+
+<span class="cm">// template literals (string interpolation!):</span>
+console.<span class="fn">log</span>(<span class="st">`hello, ${player.name}! you have ${player.health}hp`</span>);</pre>
+  </div>
+</section>
+
+<section class="lesson" id="js-functions">
+  <div class="lesson-tag js">JS · Chapter 03</div>
+  <h2>Functions</h2>
+  <div class="divider">✦</div>
+  <p>Functions are reusable blocks of code. Define once, call whenever.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> functions</div>
+    <pre><span class="cm">// function declaration</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name) {
+  <span class="kw">return</span> <span class="st">`hello, ${name}! ✦`</span>;
+}
+console.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="st">"clio"</span>));  <span class="cm">// "hello, clio! ✦"</span>
+
+<span class="cm">// arrow function (modern, concise)</span>
+<span class="kw">const</span> <span class="fn">double</span> = (n) => n * <span class="nm">2</span>;
+console.<span class="fn">log</span>(<span class="fn">double</span>(<span class="nm">5</span>));  <span class="cm">// 10</span>
+
+<span class="cm">// with multiple lines</span>
+<span class="kw">const</span> <span class="fn">takeDamage</span> = (player, amount) => {
+  player.health -= amount;
+  <span class="kw">if</span> (player.health &lt;= <span class="nm">0</span>) {
+    <span class="kw">return</span> <span class="st">"game over!"</span>;
+  }
+  <span class="kw">return</span> <span class="st">`${player.name} has ${player.health}hp left`</span>;
+};
+
+<span class="cm">// default parameters</span>
+<span class="kw">function</span> <span class="fn">cast</span>(spell, power = <span class="nm">10</span>) {
+  <span class="kw">return</span> <span class="st">`casting ${spell} at power ${power}`</span>;
+}
+<span class="fn">cast</span>(<span class="st">"fireball"</span>);        <span class="cm">// power defaults to 10</span>
+<span class="fn">cast</span>(<span class="st">"fireball"</span>, <span class="nm">99</span>);   <span class="cm">// power is 99</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="js-dom">
+  <div class="lesson-tag js">JS · Chapter 04</div>
+  <h2>The DOM</h2>
+  <div class="divider">✦</div>
+  <p>The DOM (Document Object Model) is how JavaScript sees your HTML — as a tree of objects you can read, change, create, and delete.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> dom manipulation</div>
+    <pre><span class="cm">// SELECTING elements</span>
+<span class="kw">const</span> title  = document.<span class="fn">querySelector</span>(<span class="st">"h1"</span>);         <span class="cm">// first h1</span>
+<span class="kw">const</span> cards  = document.<span class="fn">querySelectorAll</span>(<span class="st">".card"</span>);     <span class="cm">// all .card</span>
+<span class="kw">const</span> btn    = document.<span class="fn">getElementById</span>(<span class="st">"submit-btn"</span>); <span class="cm">// by id</span>
+
+<span class="cm">// READING & CHANGING content</span>
+title.textContent = <span class="st">"new title"</span>;          <span class="cm">// change text</span>
+title.innerHTML   = <span class="st">"&lt;em&gt;fancy&lt;/em&gt; title"</span>; <span class="cm">// change HTML inside</span>
+console.<span class="fn">log</span>(btn.textContent);             <span class="cm">// read it</span>
+
+<span class="cm">// CHANGING styles</span>
+title.style.color = <span class="st">"#c4607a"</span>;
+title.style.fontSize = <span class="st">"3rem"</span>;
+
+<span class="cm">// CHANGING classes</span>
+title.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="st">"visible"</span>);
+title.<span class="fn">classList</span>.<span class="fn">remove</span>(<span class="st">"hidden"</span>);
+title.<span class="fn">classList</span>.<span class="fn">toggle</span>(<span class="st">"active"</span>);       <span class="cm">// adds if absent, removes if present</span>
+
+<span class="cm">// CHANGING attributes</span>
+<span class="kw">const</span> img = document.<span class="fn">querySelector</span>(<span class="st">"img"</span>);
+img.<span class="fn">setAttribute</span>(<span class="st">"src"</span>, <span class="st">"new-image.png"</span>);
+img.<span class="fn">getAttribute</span>(<span class="st">"alt"</span>);
+
+<span class="cm">// CREATING & APPENDING new elements</span>
+<span class="kw">const</span> newDiv = document.<span class="fn">createElement</span>(<span class="st">"div"</span>);
+newDiv.textContent = <span class="st">"i appeared from thin air"</span>;
+newDiv.<span class="fn">classList</span>.<span class="fn">add</span>(<span class="st">"card"</span>);
+document.body.<span class="fn">appendChild</span>(newDiv);
+
+<span class="cm">// REMOVING an element</span>
+newDiv.<span class="fn">remove</span>();</pre>
+  </div>
+</section>
+
+<section class="lesson" id="js-events">
+  <div class="lesson-tag js">JS · Chapter 05</div>
+  <h2>Events</h2>
+  <div class="divider">✦</div>
+  <p>Events are things that happen — clicks, key presses, hovering, scrolling, the page loading. You "listen" for them with <code>addEventListener</code>.</p>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> event listeners</div>
+    <pre><span class="kw">const</span> btn = document.<span class="fn">querySelector</span>(<span class="st">"button"</span>);
+
+<span class="cm">// click</span>
+btn.<span class="fn">addEventListener</span>(<span class="st">"click"</span>, () => {
+  console.<span class="fn">log</span>(<span class="st">"clicked!"</span>);
+});
+
+<span class="cm">// the event object gives you info about what happened</span>
+btn.<span class="fn">addEventListener</span>(<span class="st">"click"</span>, (event) => {
+  console.<span class="fn">log</span>(event.target);      <span class="cm">// the element that was clicked</span>
+  event.<span class="fn">preventDefault</span>();        <span class="cm">// stop default behavior (e.g. form submit)</span>
+});
+
+<span class="cm">// input: fires every time the value changes</span>
+<span class="kw">const</span> input = document.<span class="fn">querySelector</span>(<span class="st">"input"</span>);
+input.<span class="fn">addEventListener</span>(<span class="st">"input"</span>, (e) => {
+  console.<span class="fn">log</span>(e.target.value);    <span class="cm">// current value of the input</span>
+});
+
+<span class="cm">// keyboard</span>
+document.<span class="fn">addEventListener</span>(<span class="st">"keydown"</span>, (e) => {
+  console.<span class="fn">log</span>(e.key);             <span class="cm">// "Enter", "ArrowLeft", "a", etc.</span>
+  <span class="kw">if</span> (e.key === <span class="st">"Escape"</span>) <span class="fn">closeModal</span>();
+});
+
+<span class="cm">// page ready</span>
+document.<span class="fn">addEventListener</span>(<span class="st">"DOMContentLoaded"</span>, () => {
+  console.<span class="fn">log</span>(<span class="st">"page is ready!"</span>);
+});
+
+<span class="cm">// scroll</span>
+window.<span class="fn">addEventListener</span>(<span class="st">"scroll"</span>, () => {
+  console.<span class="fn">log</span>(window.scrollY);    <span class="cm">// pixels scrolled from top</span>
+});</pre>
+  </div>
+</section>
+
+<section class="lesson" id="js-conditionals">
+  <div class="lesson-tag js">JS · Chapter 06</div>
+  <h2>Conditionals & Loops</h2>
+  <div class="divider">✦</div>
+  <div class="code-block">
+    <div class="code-block-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> conditionals & loops</div>
+    <pre><span class="cm">// IF / ELSE IF / ELSE</span>
+<span class="kw">if</span> (health &lt;= <span class="nm">0</span>) {
+  console.<span class="fn">log</span>(<span class="st">"game over"</span>);
+} <span class="kw">else if</span> (health &lt; <span class="nm">20</span>) {
+  console.<span class="fn">log</span>(<span class="st">"critical — run!"</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="st">"you're okay"</span>);
+}
+
+<span class="cm">// comparison operators</span>
+<span class="cm">// === (equal)   !== (not equal)   &gt;   &lt;   &gt;=   &lt;=</span>
+<span class="cm">// && (AND)   || (OR)   ! (NOT)</span>
+
+<span class="cm">// ternary: shorthand if/else</span>
+<span class="kw">const</span> msg = health &gt; <span class="nm">0</span> ? <span class="st">"alive"</span> : <span class="st">"defeated"</span>;
+
+<span class="cm">// FOR loop</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="nm">0</span>; i &lt; <span class="nm">5</span>; i++) {
+  console.<span class="fn">log</span>(<span class="st">`round ${i}`</span>);
+}
+
+<span class="cm">// FOR...OF: loop over arrays (so clean)</span>
+<span class="kw">const</span> items = [<span class="st">"sword"</span>, <span class="st">"potion"</span>, <span class="st">"map"</span>];
+<span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> items) {
+  console.<span class="fn">log</span>(item);
+}
+
+<span class="cm">// WHILE loop</span>
+<span class="kw">while</span> (health &gt; <span class="nm">0</span>) {
+  health -= <span class="nm">10</span>;    <span class="cm">// be careful of infinite loops!</span>
+}
+
+<span class="cm">// array methods (super useful)</span>
+items.<span class="fn">forEach</span>(item => console.<span class="fn">log</span>(item));
+<span class="kw">const</span> doubled = [<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>].<span class="fn">map</span>(n => n * <span class="nm">2</span>);    <span class="cm">// [2,4,6]</span>
+<span class="kw">const</span> evens   = [<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>,<span class="nm">4</span>].<span class="fn">filter</span>(n => n % <span class="nm">2</span> === <span class="nm">0</span>); <span class="cm">// [2,4]</span></pre>
+  </div>
+</section>
+
+<section class="lesson" id="playground">
+  <div class="lesson-tag">✦ interactive</div>
+  <h2>Live Playground</h2>
+  <div class="divider">✦</div>
+  <p>write HTML, CSS, and JS — hit <strong>run</strong> to see it rendered live ♡</p>
+  <div class="playground-wrap">
+    <div class="pg-tabs">
+      <div class="pg-tab active-html" data-tab="html" onclick="switchTab('html')">HTML</div>
+      <div class="pg-tab" data-tab="css" onclick="switchTab('css')">CSS</div>
+      <div class="pg-tab" data-tab="js" onclick="switchTab('js')">JS</div>
+      <button class="pg-run" onclick="runPlayground()">▶ run</button>
+    </div>
+    <div class="pg-pane active" id="pane-html">
+      <textarea id="pg-html" spellcheck="false">&lt;div class="card"&gt;
+  &lt;h2&gt;my little page ✦&lt;/h2&gt;
+  &lt;p&gt;hello from &lt;strong&gt;the void&lt;/strong&gt; 🌙&lt;/p&gt;
+  &lt;button id="btn"&gt;click me!&lt;/button&gt;
+  &lt;p id="msg"&gt;&lt;/p&gt;
+&lt;/div&gt;</textarea>
+    </div>
+    <div class="pg-pane" id="pane-css">
+      <textarea id="pg-css" spellcheck="false">body {
+  font-family: Georgia, serif;
+  background: #1a0d12;
+  color: #e8a0b0;
+  padding: 20px;
+}
+
+.card {
+  background: #220e16;
+  border: 1px solid #5c2d3e;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 360px;
+}
+
+h2 {
+  color: #fce8ef;
+  margin-bottom: 10px;
+}
+
+button {
+  background: #c4607a;
+  color: #0f080b;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #f0d0da;
+}</textarea>
+    </div>
+    <div class="pg-pane" id="pane-js">
+      <textarea id="pg-js" spellcheck="false">const btn = document.getElementById('btn');
+const msg = document.getElementById('msg');
+let count = 0;
+
+btn.addEventListener('click', () => {
+  count++;
+  msg.textContent = `clicked ${count} time${count === 1 ? '' : 's'} ✦`;
+  msg.style.color = '#c4607a';
+});</textarea>
+    </div>
+    <div class="pg-output-label">✦ preview</div>
+    <div class="pg-output">
+      <iframe id="pg-preview" title="live preview"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CHEATSHEET -->
+<section class="lesson" id="cheatsheet">
+  <div class="lesson-tag">quick reference</div>
+  <h2>Cheatsheet</h2>
+  <div class="divider">✦</div>
+
+  <p style="color:var(--rose);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;">HTML Tags</p>
+  <div class="ref-grid">
+    <div class="ref-card html"><code>&lt;h1&gt;–&lt;h6&gt;</code><p>headings (h1 = most important)</p></div>
+    <div class="ref-card html"><code>&lt;p&gt;</code><p>paragraph</p></div>
+    <div class="ref-card html"><code>&lt;a href=""&gt;</code><p>link</p></div>
+    <div class="ref-card html"><code>&lt;img src="" alt=""&gt;</code><p>image</p></div>
+    <div class="ref-card html"><code>&lt;ul&gt; &lt;ol&gt; &lt;li&gt;</code><p>lists</p></div>
+    <div class="ref-card html"><code>&lt;div&gt;</code><p>block container</p></div>
+    <div class="ref-card html"><code>&lt;span&gt;</code><p>inline container</p></div>
+    <div class="ref-card html"><code>&lt;strong&gt; &lt;em&gt;</code><p>bold / italic</p></div>
+    <div class="ref-card html"><code>&lt;input&gt; &lt;button&gt;</code><p>form controls</p></div>
+    <div class="ref-card html"><code>&lt;header&gt; &lt;main&gt; &lt;footer&gt;</code><p>semantic structure</p></div>
+    <div class="ref-card html"><code>&lt;section&gt; &lt;article&gt;</code><p>semantic grouping</p></div>
+    <div class="ref-card html"><code>&lt;!-- --&gt;</code><p>comment</p></div>
+  </div>
+
+  <p style="color:var(--css-accent);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:24px 0 12px;">CSS Properties</p>
+  <div class="ref-grid">
+    <div class="ref-card css"><code>color</code><p>text color</p></div>
+    <div class="ref-card css"><code>background</code><p>bg color / image / gradient</p></div>
+    <div class="ref-card css"><code>font-family / size</code><p>typeface & size</p></div>
+    <div class="ref-card css"><code>padding / margin</code><p>inner / outer spacing</p></div>
+    <div class="ref-card css"><code>border / border-radius</code><p>box edges & rounding</p></div>
+    <div class="ref-card css"><code>display: flex</code><p>flexbox layout</p></div>
+    <div class="ref-card css"><code>width / height / max-width</code><p>sizing</p></div>
+    <div class="ref-card css"><code>position</code><p>relative / absolute / fixed / sticky</p></div>
+    <div class="ref-card css"><code>transform</code><p>translate / scale / rotate</p></div>
+    <div class="ref-card css"><code>transition</code><p>smooth state changes</p></div>
+    <div class="ref-card css"><code>animation + @keyframes</code><p>looping animations</p></div>
+    <div class="ref-card css"><code>var(--name)</code><p>css custom property</p></div>
+  </div>
+
+  <p style="color:var(--js-accent);font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:24px 0 12px;">JavaScript Essentials</p>
+  <div class="ref-grid">
+    <div class="ref-card js"><code>const / let</code><p>declare variables</p></div>
+    <div class="ref-card js"><code>querySelector()</code><p>select an element</p></div>
+    <div class="ref-card js"><code>addEventListener()</code><p>listen for events</p></div>
+    <div class="ref-card js"><code>.textContent</code><p>get/set text</p></div>
+    <div class="ref-card js"><code>.classList</code><p>add / remove / toggle classes</p></div>
+    <div class="ref-card js"><code>if / else</code><p>conditionals</p></div>
+    <div class="ref-card js"><code>for / for...of</code><p>loops</p></div>
+    <div class="ref-card js"><code>function / =></code><p>define a function</p></div>
+    <div class="ref-card js"><code>console.log()</code><p>debug output</p></div>
+    <div class="ref-card js"><code>createElement()</code><p>make a new element</p></div>
+    <div class="ref-card js"><code>.map() .filter()</code><p>transform arrays</p></div>
+    <div class="ref-card js"><code>`${var}`</code><p>template literal</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>made with ♡ by <a href="#">lobotomitelabs</a> &nbsp;✦&nbsp; go build something weird and beautiful</p>
+</footer>
+
+</div>
+
+<script>
+  const starfield = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--op:${0.3+Math.random()*0.6};animation-delay:${Math.random()*5}s;`;
+    starfield.appendChild(s);
+  }
+
+  const prog = document.getElementById('prog');
+  window.addEventListener('scroll', () => {
+    prog.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.lesson').forEach(l => obs.observe(l));
+
+  const navLinks = document.querySelectorAll('nav a');
+  const secObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  document.querySelectorAll('.lesson').forEach(l => secObs.observe(l));
+
+  function switchTab(tab) {
+    document.querySelectorAll('.pg-tab').forEach(t => {
+      t.className = 'pg-tab';
+      if (t.dataset.tab === tab) t.classList.add('active-' + tab);
+    });
+    document.querySelectorAll('.pg-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById('pane-' + tab).classList.add('active');
+  }
+
+  function runPlayground() {
+    const html = document.getElementById('pg-html').value;
+    const css  = document.getElementById('pg-css').value;
+    const js   = document.getElementById('pg-js').value;
+    const iframe = document.getElementById('pg-preview');
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`);
+    doc.close();
+    setTimeout(() => {
+      iframe.style.height = Math.max(120, (doc.body ? doc.body.scrollHeight : 0) + 32) + 'px';
+    }, 100);
+  }
+  runPlayground();
+  ['pg-html','pg-css','pg-js'].forEach(id => {
+    document.getElementById(id).addEventListener('input', runPlayground);
+  });
+</script>
+</body>
+</html>
